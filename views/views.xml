@@ -1,0 +1,87 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="explo_list_view">
+      <field name="name">explo.list</field>
+      <field name="model">explo.explo</field>
+      <field name="arch" type="xml">
+          <tree string="Explo List">
+            <field name="code"/>
+            <field name="rubriques"/>
+            <field name="montant"/>
+          </tree>
+      </field>
+  </record>
+
+    <record model="ir.ui.view" id="explo_form_view">
+      <field name="name">explo.form</field>
+      <field name="model">explo.explo</field>
+      <field name="arch" type="xml">
+          <form string="Explo Form">
+              <sheet>
+                  <group>
+                    <field name="code"/>
+                    <field name="rubriques"/>
+                    <field name="montant"/>
+                  </group>
+                  <notebook>
+                      <page string="children">
+                          <field name="children">
+                              <tree string="Registered children">
+                                <field name="codec"/>
+                                <field name="rubriquesc"/>
+                                <field name="montantc"/>
+                              </tree>
+                          </field>
+                      </page>
+                  </notebook>
+              </sheet>
+          </form>
+      </field>
+  </record>
+ 
+
+    <!-- actions opening views on models -->
+    
+    <record model="ir.actions.act_window" id="explo.action_window">
+      <field name="name">explo window</field>
+      <field name="res_model">explo.explo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    
+
+    <!-- server action to the one above -->
+    
+    <record model="ir.actions.server" id="explo.action_server">
+      <field name="name">explo server</field>
+      <field name="model_id" ref="model_explo_explo"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    
+
+    <!-- Top menu item -->
+    
+    <menuitem name="explo" id="explo.menu_root"/>
+    
+    <!-- menu categories -->
+    
+    <menuitem name="Menu 1" id="explo.menu_1" parent="explo.menu_root"/>
+    <menuitem name="Menu 2" id="explo.menu_2" parent="explo.menu_root"/>
+    
+    <!-- actions -->
+    
+    <menuitem name="List" id="explo.menu_1_list" parent="explo.menu_1"
+              action="explo.action_window"/>
+    <menuitem name="Server to list" id="explo" parent="explo.menu_2"
+              action="explo.action_server"/>
+    
+  </data>
+</odoo>
